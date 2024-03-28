@@ -22,7 +22,10 @@ stages:
               artifact: 'terraform-manifests-out'
               publishLocation: 'pipeline'
           
-          - script: |
-              terraform init
-              terraform validate
-            displayName: 'Terraform Init and Validate'
+          - task: CmdLine@2
+            inputs:
+              script: |
+                terraform init
+                terraform validate
+              workingDirectory: $(System.DefaultWorkingDirectory)/01-terraform-mainfests-aks
+    
