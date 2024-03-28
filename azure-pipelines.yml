@@ -93,3 +93,47 @@ stages:
                   providerAzureRmSubscriptionId: 'eaf0870e-e442-41db-84e9-e4a3ee49c62d'
                   commandOptions: '$(Pipeline.Workspace)/terraform-manifests-out/$(DEV_ENVIRONMENT)-$(Build.BuildId).out'
                   allowTelemetryCollection: false
+
+      - deployment: DeployQAAKSCluster
+        dependsOn: DeployDevAKSCluster
+        displayName: DeployDevAKSCluster
+        environment: $(QA_ENVIRONMENT)
+        strategy:
+          runOnce:
+           deploy:
+             steps:
+              - task: DownloadSecureFile@1
+                name: sshkey
+                inputs:
+                  secureFile: 'aksprodsshkey.pub'
+          
+              - task: TerraformCLI@2
+                inputs:
+                  command: 'init'
+                  workingDirectory: '$(Pipeline.Workspace)/terraform-manifests-out'
+                  backendType: 'azurerm'
+                  backendServiceArm: 'terraform-azure-aks-svc-conn'
+                  backendAzureRmResourceGroupName: 'terraform-storage-rg1'
+                  backendAzureRmStorageAccountName: 'terraformdevon1006'
+                  backendAzureRmContainerName: 'terraform'
+                  backendAzureRmKey: 'aks-$(QA_ENVIRONMENT).tfstate'
+                  allowTelemetryCollection: false
+              
+
+              - task: TerraformCLI@2
+                inputs:
+                  command: 'plan'
+                  workingDirectory: '$(Pipeline.Workspace)/terraform-manifests-out'
+                  environmentServiceName: 'terraform-azure-aks-svc-conn'
+                  providerAzureRmSubscriptionId: 'eaf0870e-e442-41db-84e9-e4a3ee49c62d'
+                  commandOptions: '-var ssh_public_key=$(sshkey.secureFilePath) -var environment=$(QA_ENVIRONMENT) -out $(Pipeline.Workspace)/terraform-manifests-out/$(QA_ENVIRONMENT)-$(Build.BuildId).out'
+                  allowTelemetryCollection: false
+              
+              - task: TerraformCLI@2
+                inputs:
+                  command: 'apply'
+                  workingDirectory: '$(Pipeline.Workspace)/terraform-manifests-out'
+                  environmentServiceName: 'terraform-azure-aks-svc-conn'
+                  providerAzureRmSubscriptionId: 'eaf0870e-e442-41db-84e9-e4a3ee49c62d'
+                  commandOptions: '$(Pipeline.Workspace)/terraform-manifests-out/$(QA_ENVIRONMENT)-$(Build.BuildId).out'
+                  allowTelemetryCollection: false
