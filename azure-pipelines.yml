@@ -22,10 +22,25 @@ stages:
               artifact: 'terraform-manifests-out'
               publishLocation: 'pipeline'
           
-          - task: CmdLine@2
+          - task: TerraformInstaller@0
             inputs:
-              script: |
-                terraform init
-                terraform validate
-              workingDirectory: $(System.DefaultWorkingDirectory)/01-terraform-mainfests-aks
-    
+              terraformVersion: 'latest'
+          - task: TerraformCLI@2
+            inputs:
+              command: 'init'
+              workingDirectory: '$(System.DefaultWorkingDirectory)/01-terraform-mainfests-aks'
+              backendType: 'azurerm'
+              backendServiceArm: 'terraform-azure-aks-svc-conn'
+              backendAzureRmResourceGroupName: 'terraform-storage-rg1'
+              backendAzureRmStorageAccountName: 'terraformdevon1006'
+              backendAzureRmContainerName: 'terraform'
+              backendAzureRmKey: 'terraform.tfstate'
+              allowTelemetryCollection: false'
+          
+          - task: TerraformCLI@2
+            inputs:
+              command: 'validate'
+              workingDirectory: '$(System.DefaultWorkingDirectory)/01-terraform-mainfests-aks'
+              allowTelemetryCollection: false
+          
+          
