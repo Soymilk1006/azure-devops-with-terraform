@@ -88,6 +88,6 @@ stages:
               - task: TerraformCLI@2
                 inputs:
                   command: 'apply'
-                  workingDirectory: '$(Pipeline.Workspace)/terraform-manifests-out'
+                  environmentServiceName: 'terraform-azure-aks-svc-conn'
                   commandOptions: '$(Pipeline.Workspace)/terraform-manifests-out/$(DEV_ENVIRONMENT)-$(Build.BuildId).out'
                   allowTelemetryCollection: false
