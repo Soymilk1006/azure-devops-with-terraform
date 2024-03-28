@@ -78,7 +78,7 @@ stages:
 
               - task: TerraformCLI@2
                 inputs:
-                  command: 'validate'
+                  command: 'plan'
                   workingDirectory: '$(Pipeline.Workspace)/terraform-manifests-out'
                   commandOptions: '-var ssh_public_key=$(sshkey.secureFilePath) -var environment=$(DEV_ENVIRONMENT) -out $(Pipeline.Workspace)/terraform-manifests-out/$(DEV_ENVIRONMENT)-$(Build.BuildId).out'
                   allowTelemetryCollection: false
