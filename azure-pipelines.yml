@@ -80,6 +80,8 @@ stages:
                 inputs:
                   command: 'plan'
                   workingDirectory: '$(Pipeline.Workspace)/terraform-manifests-out'
+                  environmentServiceName: 'terraform-azure-aks-svc-conn'
+                  providerAzureRmSubscriptionId: 'eaf0870e-e442-41db-84e9-e4a3ee49c62d'
                   commandOptions: '-var ssh_public_key=$(sshkey.secureFilePath) -var environment=$(DEV_ENVIRONMENT) -out $(Pipeline.Workspace)/terraform-manifests-out/$(DEV_ENVIRONMENT)-$(Build.BuildId).out'
                   allowTelemetryCollection: false
               
