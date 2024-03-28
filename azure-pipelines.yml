@@ -113,6 +113,7 @@ stages:
                 inputs:
                   command: 'init'
                   workingDirectory: '$(Pipeline.Workspace)/terraform-manifests-out'
+                  commandOptions: '-reconfigure'
                   backendType: 'azurerm'
                   backendServiceArm: 'terraform-azure-aks-svc-conn'
                   backendAzureRmResourceGroupName: 'terraform-storage-rg1'
