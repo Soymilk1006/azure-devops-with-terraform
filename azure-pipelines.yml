@@ -66,6 +66,7 @@ stages:
               - task: TerraformCLI@2
                 inputs:
                   command: 'init'
+                  commandOptions: '-reconfigure'
                   workingDirectory: '$(Pipeline.Workspace)/terraform-manifests-out'
                   backendType: 'azurerm'
                   backendServiceArm: 'terraform-azure-aks-svc-conn'
