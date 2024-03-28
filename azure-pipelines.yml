@@ -96,7 +96,7 @@ stages:
 
       - deployment: DeployQAAKSCluster
         dependsOn: DeployDevAKSCluster
-        displayName: DeployDevAKSCluster
+        displayName: DeployQAAKSCluster
         environment: $(QA_ENVIRONMENT)
         strategy:
           runOnce:
