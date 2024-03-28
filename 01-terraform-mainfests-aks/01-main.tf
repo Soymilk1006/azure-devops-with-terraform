@@ -32,6 +32,10 @@ provider "azurerm" {
   }
 }
 
+provider "azuread" {
+  tenant_id = "4b90474a-4233-42db-8f75-f8ac9b75e7dc"
+}
+
 
 resource "random_pet" "aksrandom" {
 
