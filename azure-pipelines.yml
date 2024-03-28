@@ -22,24 +22,7 @@ stages:
               artifact: 'terraform-manifests-out'
               publishLocation: 'pipeline'
           
-          - task: Terraform@2
-            displayName: Install Terraform and apply terraform init
-            inputs:
-              TemplatePath: '$(System.DefaultWorkingDirectory)/01-terraform-mainfests-aks'
-              Arguments: 'init'
-              InstallTerraform: true
-              UseAzureSub: true
-              ConnectedServiceNameSelector: 'ConnectedServiceNameARM'
-              ConnectedServiceNameARM: 'terraform-azure-aks-svc-conn'
-              ManageState: true
-              SpecifyStorageAccount: true
-              StorageAccountResourceGroup: 'terraform-storage-rg1'
-              StorageAccountRM: 'terraformdevon1006'
-              StorageContainerName: 'terraform'
-          
-          # - task: Terraform@2
-          #   inputs:
-          #     TemplatePath: '$(System.DefaultWorkingDirectory)/01-terraform-mainfests-aks'
-          #     Arguments: 'validate'
-          #     InstallTerraform: false
-          #     UseAzureSub: false
+          - script: |
+              terraform init
+              terraform validate
+            displayName: 'Terraform Init and Validate'
